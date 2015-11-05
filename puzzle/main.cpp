@@ -158,9 +158,23 @@ class jugador
 			};
 		};
     
-        void movementGrabbing()//Este será el movimiento del jugador mientras este agarrando una caja, movera la caja y el jugador de ser posible
+        void movementGrabbing(char moveDirection)//Este será el movimiento del jugador mientras este agarrando una caja, movera la caja y el jugador de ser posible
         {
-        
+            if (moveDirection == 'W' && grabing)
+            {
+                coordenadas.y--;
+                grabedBox.y--;
+                Character1.setRotation(0);
+                if (coordenadas.y == goalPosition)
+                {
+                    moving = false;
+                    goalPosition = 0;
+                }
+            }else if (moveDirection == 'S' && grabing)
+            {
+            
+            };
+
         };
 		//Muevete
 		void movement(char moveDirection)
@@ -222,19 +236,19 @@ class jugador
 		void setGoalPosition(int pointGoal){ goalPosition = pointGoal; };
 		void setIfMove(bool setCondition){ CanIMove = setCondition; };	//Nueva funcion
 		bool getIfMove() { return CanIMove; }							//Nueva funcion
-        void setGrabing(bool input){grabing = input;};
-        void setGrabBox(Vector2f box){ grabedBox = box; };
+        void setGrabing(bool input){grabing = input;};                  //nuevo
+        void setGrabBox(Vector2f box){ grabedBox = box; };              //nuevo
 	private:
 		Sprite Character1;
 		Texture CharTexture;
-		AnimationBySprites walk1 = AnimationBySprites(); //Animacion de caminar
+		AnimationBySprites walk1 = AnimationBySprites();                //Animacion de caminar
 		float MovementSpeed = 1.0;
 		char nextMove = 'V';
 		Vector2f coordenadas;
 		bool moving = false, CanIMove = true;
 		int goalPosition = 0;
-        bool grabing = false;//nuevo
-        Vector2f grabedBox;
+        bool grabing = false;                                           //nuevo
+        Vector2f grabedBox;                                             //nuevo
 };
 
 int main()
@@ -374,11 +388,11 @@ int main()
 							{
 								if (yo.IsPossible(Vector2f(floor(yo.getPosition().x / 34), floor(yo.getPosition().y / 34)), &contenedorDeCajas[c])) //Hay una caja en la direccion a la que quieres ir?
 								{
-                                    if(yo.getNextMove() == 'G'){
-                                        yo.setGrabing(true);
-                                        yo.setGrabBox(contenedorDeCajas[c]);
+                                    if(yo.getNextMove() == 'G'){ //Si mientras ves a esa direccion hay una caja y presionas G, la agarras
+                                        yo.setGrabing(true); //Entonces el estado de grabing se cambia a verdadero
+                                        yo.setGrabBox(contenedorDeCajas[c]); //guardas las coordenadas de la caja que tienes agarrada
                                     }else{
-                                        yo.setGrabing(false);
+                                        yo.setGrabing(false); //Si no presionas G no la agarras
                                     };
 									yo.setIfMove(false); //Si hay caja -> no te puedes mover y rompe el bucle para no soobrescribir
 									break;
