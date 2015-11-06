@@ -237,6 +237,7 @@ class jugador
 		void setIfMove(bool setCondition){ CanIMove = setCondition; };	//Nueva funcion
 		bool getIfMove() { return CanIMove; }							//Nueva funcion
         void setGrabing(bool input){grabing = input;};                  //nuevo
+        bool getGrabing(){ return grabing; };
         void setGrabBox(Vector2f box){ grabedBox = box; };              //nuevo
 	private:
 		Sprite Character1;
@@ -402,7 +403,7 @@ int main()
 									yo.setIfMove(true); //Si no hay caja -> puedes moverte a donde quieres ir
 								}
 							}
-							if (yo.getIfMove()) //Si te puedes mover...
+							if (yo.getIfMove() &&  !yo.getGrabing()) //Si te puedes mover... y no estas agarrando una caja   NUEVO
 							{
 								if (yo.getNextMove() == 'W') //y presionas W
 								{
@@ -422,6 +423,7 @@ int main()
 								};
 								yo.actMoving(); //Activar movimiento
 							};
+                            //se necesita un algoritmo similar al de arriba para mover al jugador mientras agarra la caja
 						};
                         
 					};
