@@ -17,6 +17,12 @@ int main()
 
 	jugador yo = jugador(10, 13);
     
+    int score = 0;   //Prueba
+    Font sansation;
+    sansation.loadFromFile(resourcePath() + "sansation.ttf");
+    Text scoreLabel(to_string(score),sansation);
+    scoreLabel.setColor(Color::White);
+    scoreLabel.setPosition(2 * 34, 15 * 34);
     
     
     Item lata = Item(1);
@@ -122,6 +128,7 @@ int main()
 			{
 				case 1:
 					//Dibujar escenario
+                    window.draw(scoreLabel);
 					for (int i = 0; i < contenedorDeSuelo.size(); i++)
 					{
 						Tile1.positionOnMap(&contenedorDeSuelo[i]);
@@ -143,9 +150,11 @@ int main()
                         window.draw(lata.getSprite());
                     };
                     
-                    if (yo.getPosition() == lata.getPosition())
+                    if (yo.getPosition() == lata.getPosition() && lata.isVisible())
                     {
                         lata.setVisible(false);
+                        score += 100;
+                        scoreLabel.setString(to_string(score));
                     }; //Prueba
                     
 					//Comprobar que tu accion es posible
