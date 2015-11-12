@@ -17,18 +17,29 @@ int main()
 
 	jugador yo = jugador(10, 13);
     
-    int score = 0;   //Prueba
+    int counter;                //Nueva variable auxiliar
+    int score = 0;   
     Font sansation;
     sansation.loadFromFile(resourcePath() + "sansation.ttf");
     Text scoreLabel(to_string(score),sansation);
     scoreLabel.setColor(Color::White);
     scoreLabel.setPosition(2 * 34, 15 * 34);
-    
+    Sprite player = yo.getCharSprite();
     
     Item lata = Item(1);
     Vector2f testPosition = Vector2f(8 , 11);
     
 	bloque box = bloque(1);
+    
+    vector <Item>::const_iterator iter1; //Nuevo - iterador :3 si lo estudias bien ser‡s un dios :: nota personal
+    vector <Item> contenedorDeLatas;   // Nuevo - estudiar el tipo vector :: nota personal
+    lata.setPosition(1,5);
+    contenedorDeLatas.push_back(lata);
+    lata.setPosition(11, 1);
+    contenedorDeLatas.push_back(lata);
+    lata.setPosition(10, 11);
+    contenedorDeLatas.push_back(lata);
+    
 	vector <Vector2f> contenedorDeCajas; //Contenedor de posiciones (Ya estan todas)
 	contenedorDeCajas.push_back(Vector2f(8, 13));
 	contenedorDeCajas.push_back(Vector2f(10, 9));
@@ -139,23 +150,39 @@ int main()
 					{
 						box.positionOnMap(&contenedorDeCajas[i]);
 						window.draw(box.getSprite());
-					}
-                    
+                    };
+                    //Dibujar Latas
+                    counter=0;
+                    for (iter1=contenedorDeLatas.begin(); iter1 != contenedorDeLatas.end(); iter1++) {
+                        window.draw(contenedorDeLatas[counter].sprite);
+                        counter++;
+                    }
+                    //Borrar Latas
+                    counter=0;
+                    for(iter1 = contenedorDeLatas.begin(); iter1 != contenedorDeLatas.end();iter1++)
+                    {
+                        if( contenedorDeLatas[counter].destroy == true){
+                            contenedorDeLatas.erase(iter1);
+                            break;
+                        };
+                        counter++;
+                    };
+                    //Colision con latas
+                    counter=0;
+                    for(iter1 = contenedorDeLatas.begin(); iter1 != contenedorDeLatas.end();iter1++)
+                    {
+                        if(yo.getPosition() == contenedorDeLatas[counter].getPosition()){
+                            contenedorDeLatas[counter].destroy = true;
+                            score += 100;
+                            scoreLabel.setString(to_string(score));
+                            break;
+                        };
+                        counter++;
+                    };
+
 					//Revisar que accion quieres hacer (Solo si no te estas moviendo).
 					if (!yo.getMovingState()) { yo.checkMove(); };
                     
-                    if(lata.isVisible())
-                    {
-                        lata.setPosition(&testPosition);
-                        window.draw(lata.getSprite());
-                    };
-                    
-                    if (yo.getPosition() == lata.getPosition() && lata.isVisible())
-                    {
-                        lata.setVisible(false);
-                        score += 100;
-                        scoreLabel.setString(to_string(score));
-                    }; //Prueba
                     
 					//Comprobar que tu accion es posible
 					for (int a = 0; a < contenedorDeSuelo.size(); a++) //For suelo
@@ -190,6 +217,8 @@ int main()
 													{
 														yo.setIfMove(true);
 													};
+                                                    //Hay una lata a 2 de mi direcci—n
+                                                    
 												};
 												if (yo.getIfMove()) //Si te puedes mover
 												{

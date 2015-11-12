@@ -1,14 +1,13 @@
 
 class Item
 {
-	//Hasta ahora solo existe un tipo de item, el 1 que es una lata
-	public:
+    public:
 		Item(){};
 		Item(int ID){
         texture.loadFromFile(resourcePath() + "Spray.png");
-        Sprite.setTexture(texture);
-        Sprite.scale(0.06, 0.06);// aun en prueba no es el tamaña final
-        Sprite.setOrigin(Vector2f(Sprite.getTexture()->getSize().x / 3 * 0.5, Sprite.getTexture()->getSize().y / 2 * 0.5));
+        sprite.setTexture(texture);
+        sprite.scale(0.06, 0.06);// aun en prueba no es el tamaña final
+        sprite.setOrigin(Vector2f(sprite.getTexture()->getSize().x / 3 * 0.5, sprite.getTexture()->getSize().y / 2 * 0.5));
         itemId = ID;
 		};
         ~Item(){};
@@ -16,28 +15,27 @@ class Item
         {
             position.x = newPosition-> x * 34;
             position.y = newPosition-> y * 34;
-            Sprite.setPosition(position);
+            sprite.setPosition(position);
+        };
+        void setPosition(int newPositionX, int newPositionY)
+        {
+            position.x = newPositionX * 34;
+            position.y = newPositionY * 34;
+            sprite.setPosition(position);
         };
     
         Vector2f getPosition()
         {
             return position;
         };
-        void setVisible(bool input)
-        {
-            visible = input; 
-        };
-        bool isVisible()
-        {
-            return visible;
-        };
+        bool destroy = false;  // Nueva variable publica !
         int getId(){return itemId;};
-        Sprite getSprite(){return Sprite;};
-        void setSprite(Sprite tempSprite){  Sprite = tempSprite; };
+        Sprite getSprite(){return sprite;};
+        void setSprite(Sprite tempSprite){  sprite = tempSprite; };
+        Sprite sprite;
 	private:
 			Texture texture;
-			Sprite Sprite;
+			
 			Vector2f position;
-            bool visible = true;
             int itemId;
 };
